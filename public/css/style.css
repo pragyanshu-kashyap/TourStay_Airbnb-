@@ -1,0 +1,92 @@
+body{
+    background-color: rgb(156, 223, 173);
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.navbar{
+    height: 5rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.fa-route{
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link{
+    color: #222222 !important;
+    font-size: 1.2rem !important;
+}
+
+/* footer */
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+.f-info-links , .f-info-socials , .f-info-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-info-socials i{
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.f-info {
+    height: 6rem;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgb(139, 222, 229);
+    
+}
+
+/* cards */
+.card{
+    border: none !important;
+    margin-bottom: 2rem;   
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    height: 20rem !important;
+}
+
+.card-body{
+    padding: 1rem !important;
+    text-align: center !important;
+}
+
+.card-text{
+    font-weight: 400 !important;
+}
+
+.listing-link{
+    text-decoration: none !important;
+}
+
+/* card effect */
+.card:hover{
+    transform: scale(1.05) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{ /*jb hm hover krenge tb hi opacity change hoga aur jo text class card-img-overlay mai hoga wo visible hoga*/
+    opacity: 0.25 !important;
+    background-color: white !important;
+    
+}
