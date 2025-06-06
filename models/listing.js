@@ -22,5 +22,5 @@ const listingSchema = new Schema({
 });
 
 
-const Listing= mongoose.model('Listing', listingSchema);
-module.exports = Listing;
+const Listing= mongoose.model('Listing', listingSchema); // here we are creating a model named "Listing" from listingSchema which is defined above in this file., left side is the name of the model and right side is the schema which we created above. mongoose will automatically convert the model name to plural form and lowercase it, so it will create a collection named "listings" in the database. collection name is always plural and lowercase in mongoose, so we don't have to worry about that.
+module.exports = Listing; // this will export the Listing model so that it can be used in other files.

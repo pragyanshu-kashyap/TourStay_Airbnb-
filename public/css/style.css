@@ -90,3 +90,29 @@ body{
     background-color: white !important;
     
 }
+
+/* show-listings */
+.row .btns{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 2vh;
+    margin-top: 1vh;
+    
+    
+}
+
+.row .btns .btnEdit button{
+    background-color: #1b1415;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.row .btns .btnDel button{
+    background-color: #d8414b;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}

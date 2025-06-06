@@ -1,66 +1,80 @@
-<% layout("listings/layouts/boilerplate.ejs") -%>
-<body>
-  <h2>Edit Listing</h2>
-  <form action="/listings/<%=listing._id %>" method="POST">
-    <div>
-      <label for="title" class="form-label">Title</label>
+<% layout("listings/layouts/boilerplate.ejs") -%> <%/* this line is to use the
+boilerplate.ejs file , which is in layouts folder, or ab iski wajah se
+boilerplate.ejs ka code run hoga. Aur hme baar baar footer and navbar ko use nhi
+krna hoga qki wo boilerplate.ejs mai hoga. or hme iss line k wajah se serve
+hoga. */%>
+<div class="row mt-4">
+  <div class="col-8 offset-2">
+    <h2>Edit Listing</h2>
+    <form action="/listings/<%=listing._id %>" method="POST">
+      <div>
+        <label for="title" class="form-label">Title</label>
 
-      <input type="text" name="title" placeholder="Title"
-      value="<%=listing.title %>" class=form-control>
-    </div>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value="<%=listing.title %>"
+          class="form-control"
+        />
+      </div>
 
-    <div>
-      <label for="description" class="form-label">Description</label>
-      <textarea type="text" name="description" class="form-control">
+      <div>
+        <label for="description" class="form-label">Description</label>
+        <textarea type="text" name="description" class="form-control">
 <%=listing.description %></textarea
-      >
-    </div>
+        >
+      </div>
 
-    <div>
-      <label for="image" class="form-label">Image URL</label>
-      <input
-        type="text"
-        name="image"
-        placeholder="Image URL"
-        value="<%=listing.image %>"
-        class="form-control"
-      />
-    </div>
+      <div>
+        <label for="image" class="form-label">Image URL</label>
+        <input
+          type="text"
+          name="image"
+          placeholder="Image URL"
+          value="<%=listing.image %>"
+          class="form-control"
+        />
+      </div>
 
-    <div>
-      <label for="price" class="form-label">Price</label>
-      <input
-        type="number"
-        name="price"
-        placeholder="Price"
-        value="<%=listing.price %>"
-        class="form-control"
-      />
-    </div>
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            type="number"
+            name="price"
+            placeholder="Price"
+            value="<%=listing.price %>"
+            class="form-control"
+          />
+        </div>
 
-    <div>
-      <label for="location" class="form-label">Location</label>
-      <input
-        type="text"
-        name="location"
-        placeholder="Location"
-        value="<%=listing.location %>"
-        class="form-control"
-      />
-    </div>
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            name="country"
+            placeholder="Country"
+            value="<%=listing.country %>"
+            class="form-control"
+          />
+        </div>
+      </div>
 
-    <div>
-      <label for="country" class="form-label">Country</label>
-      <input
-        type="text"
-        name="country"
-        placeholder="Country"
-        value="<%=listing.country %>"
-        class="form-control"
-      />
-    </div>
-    <br />
+      <div>
+        <label for="location" class="form-label">Location</label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value="<%=listing.location %>"
+          class="form-control"
+        />
+      </div>
 
-    <button class="btn btn-primary" type="submit">Save</button>
-  </form>
-</body>
+      <br />
+
+      <button class="btn btn-danger mb-2" type="submit">Save</button>
+    </form>
+  </div>
+</div>
