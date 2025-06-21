@@ -3,27 +3,33 @@ boilerplate.ejs file , which is in layouts folder, or ab iski wajah se
 boilerplate.ejs ka code run hoga. Aur hme baar baar footer and navbar ko use nhi
 krna hoga qki wo boilerplate.ejs mai hoga. or hme iss line k wajah se serve
 hoga. */%>
+
 <div class="row mt-4">
   <div class="col-8 offset-2">
     <h2>Edit Listing</h2>
-    <form action="/listings/<%=listing._id %>" method="POST">
+    <form action="/listings/<%=listing._id %>" method="POST" class="needs-validation" novalidate>
       <div>
         <label for="title" class="form-label">Title</label>
-
         <input
           type="text"
           name="title"
           placeholder="Title"
           value="<%=listing.title %>"
           class="form-control"
+          required
         />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
       </div>
 
       <div>
         <label for="description" class="form-label">Description</label>
-        <textarea type="text" name="description" class="form-control">
-<%=listing.description %></textarea
-        >
+        <textarea type="text" name="description" class="form-control" required>
+        <%=listing.description %></textarea>
+        <div class="valid-feedback">
+            Looks good!
+          </div>
       </div>
 
       <div>
@@ -34,7 +40,11 @@ hoga. */%>
           placeholder="Image URL"
           value="<%=listing.image %>"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">
+            Looks good!
+          </div>
       </div>
 
       <div class="row">
@@ -46,7 +56,11 @@ hoga. */%>
             placeholder="Price"
             value="<%=listing.price %>"
             class="form-control"
+            required
           />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
         </div>
 
         <div class="mb-3 col-md-8">
@@ -57,7 +71,11 @@ hoga. */%>
             placeholder="Country"
             value="<%=listing.country %>"
             class="form-control"
+            required
           />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
         </div>
       </div>
 
@@ -69,7 +87,11 @@ hoga. */%>
           placeholder="Location"
           value="<%=listing.location %>"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">
+            Looks good!
+          </div>
       </div>
 
       <br />

@@ -1,44 +1,76 @@
 <% layout("listings/layouts/boilerplate.ejs") -%>
-<div class="row mt-2"></div>
+    <div class="row mt-2"></div>
 
     <div class="col-8 offset-2 mt-2 mb-2">
         <h2>Add a new listing</h2>
 
-        <form action="/listings" method="POST">
+        <form action="/listings" method="POST" class="needs-validation" novalidate>
 
-            <div class="mb-3" >
-                <label for="title" class="form-label" > Add a Catchy Title:</label>
-                <input type="text" name="title" placeholder="Title"  class="form-control">
+            <div class="mb-3">
+                <label for="title" class="form-label"> Add a Catchy Title:</label>
+                <input type="text" name="title" placeholder="Title" class="form-control" required>
+                <div class="invalid-feedback">
+                    please enter a title. It should be catchy !
+                </div>
             </div>
-            
+
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <textarea type="text" name="description" placeholder="Description"  class="form-control"></textarea>
+                <textarea type="text" name="description" placeholder="Description" class="form-control"
+                    required></textarea>
+                <div class="invalid-feedback">
+                    please enter a description. It should be detailed !
+                </div>
             </div>
-            
+
             <div class="mb-3">
                 <label for="image" class="form-label">Image URL:</label>
-                <input type="text" name="image" placeholder="Image URL"  class="form-control">
-            </div>
-            
-            <div class="mb-3">
-                <label for="price" class="form-label">Price:</label>
-                <input type="number" name="price" placeholder="Price  (i.e: &#8377 1000)"  class="form-control">
-            </div>
+                <input type="text" name="image" placeholder="Image URL" class="form-control">
+                <div class="invalid-feedback">
+                    please enter a valid image URL.
+                </div>
 
-            <div class="mb-3">
-                <label for="location" class="form-label">Location:</label>
-                <input type="text" name="location" placeholder="Location"  class="form-control">
-            </div>
-            
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="number" name="price" placeholder="Price  (i.e: &#8377 1000)" class="form-control"
+                        required>
+                    <div class="invalid-feedback">
+                        please enter a price. It should be a number !
+                    </div>
 
-            <div class="mb-3">
-                <label for="country" class="form-label">Country:</label>
-                <input type="text" name="country" placeholder="Country"  class="form-control">
-            </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location:</label>
+                        <input type="text" name="location" placeholder="Location" class="form-control" required>
+                        <div class="invalid-feedback">
+                            please enter a location. It should be a valid location !
+                        </div>
+                    </div>
 
-            <button class="btn btn-success" type="submit">ADD</button>
+
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country:</label>
+                        <input type="text" name="country" placeholder="Country" class="form-control" required>
+                        <div class="invalid-feedback">
+                            please enter a country. It should be a valid country !
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label" for="invalidCheck">
+                                Agree to terms and conditions
+                            </label>
+                            <div class="invalid-feedback">
+                                You must agree before to our T&C before submitting.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button class="btn btn-success" type="submit">ADD</button>
         </form>
     </div>
 
-</div>
+    </div>
