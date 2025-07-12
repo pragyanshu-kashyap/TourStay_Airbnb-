@@ -12,7 +12,7 @@ hoga. */%>
         <label for="title" class="form-label">Title</label>
         <input
           type="text"
-          name="title"
+          name="listing[title]"
           placeholder="Title"
           value="<%=listing.title %>"
           class="form-control"
@@ -25,7 +25,7 @@ hoga. */%>
 
       <div>
         <label for="description" class="form-label">Description</label>
-        <textarea type="text" name="description" class="form-control" required>
+        <textarea type="text" name="listing[description]" class="form-control" required>
         <%=listing.description %></textarea>
         <div class="valid-feedback">
             Looks good!
@@ -36,7 +36,7 @@ hoga. */%>
         <label for="image" class="form-label">Image URL</label>
         <input
           type="text"
-          name="image"
+          name="listing[image]"
           placeholder="Image URL"
           value="<%=listing.image %>"
           class="form-control"
@@ -52,7 +52,7 @@ hoga. */%>
           <label for="price" class="form-label">Price</label>
           <input
             type="number"
-            name="price"
+            name="listing[price]"
             placeholder="Price"
             value="<%=listing.price %>"
             class="form-control"
@@ -67,7 +67,7 @@ hoga. */%>
           <label for="country" class="form-label">Country</label>
           <input
             type="text"
-            name="country"
+            name="listing[country]"
             placeholder="Country"
             value="<%=listing.country %>"
             class="form-control"
@@ -83,7 +83,7 @@ hoga. */%>
         <label for="location" class="form-label">Location</label>
         <input
           type="text"
-          name="location"
+          name="listing[location]"
           placeholder="Location"
           value="<%=listing.location %>"
           class="form-control"

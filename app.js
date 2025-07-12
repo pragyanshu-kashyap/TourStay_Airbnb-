@@ -18,8 +18,7 @@ app.engine("ejs", ejsMate); // this line is used to use ejsMate as the template 
 
 app.use(express.static(path.join(__dirname, "/public"))); // to use the static files from the public folder
 
-// Serve static files from the React build directory
-app.use(express.static(path.join(__dirname, "frontend/src/components")));
+// Note: Static file serving for React app is handled in userrouter.js
 
 //local imports
 const userrouter = require("./router/userrouter.js");
@@ -37,23 +36,39 @@ async function main() {
 app.use(adminrouter);
 app.use(userrouter);
 
-app.use((req, res, next) => {
+// Note: The catch-all route is now handled in userrouter.js for SPA routing
+// API routes are handled before the catch-all route
+
+// Global error handling middleware to handle errors
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Something went wrong";
+  if (statusCode === 404) {
+    // to render the 404 page if the error is a 404, and otherwise show a generic error message.
+    return res.status(404).render("listings/404error", { error: message });
+  }
   res
-    .status(404)
-    .render("listings/404error", { error: "Page Not Found" }); //the render() method is used to render the ejs template for 404 error page.
+    .status(statusCode)
+    .render("listings/404error", { error: message }); // You can create a generic error.ejs if you want
 });
 
-// **Problem:**  
+// // agar koi route match nahi hota hai to yha iss middleware pe hit hoga or 404 error page show hoga
+// app.use("*", (req, res, next) => {
+//   res
+//     .status(404)
+//     .render("listings/404error", { error: "Page Not Found" }); //the render() method is used to render the ejs template for 404 error page.
+// });
+
+// **Problem:**
 // The `.render()` method expects the view name relative to your views directory, **without the file extension** and without a leading AirBnb project.
 
-// **Solution:**  
+// **Solution:**
 // If your `404error.ejs` file is inside listings, you should use:
 
-// ```javascript
 // res.status(404).render("listings/404error", { error: "Page Not Found" });
 // ```
 
-// **Summary:**  
+// **Summary:**
 // - Remove AirBnb project and `.ejs` from the path.
 // - Use the path relative to your views folder.
 

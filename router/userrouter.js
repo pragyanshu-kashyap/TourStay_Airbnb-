@@ -6,6 +6,30 @@ const Listing = require("../models/listing.js");
 const path = require("path");
 const methodoverride = require("method-override"); // this is used to override the default method of form submission, so that we can use PUT and DELETE methods in our forms.
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap async functions to handle errors
+
+// EJS routes - serve the EJS pages (these must come before API routes)
+
+userrouter.get(  // this is the route to get all listings
+  "/listings",
+  wrapAsync(async (req, res) => {
+    const allListings = await Listing.find({});
+    res.render("listings/index.ejs", { allListings });
+  })
+);
+
+userrouter.get(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      return res
+        .status(404)
+        .render("listings/404error", { error: "Listing not found" });
+    }
+    res.render("listings/show.ejs", { listing });
+  })
+);
 
 // userrouter.set("view engine", "ejs");  // this line is used to set the view engine to ejs, so that we can use ejs templates in our views folder.
 
@@ -19,22 +43,31 @@ const ejsMate = require("ejs-mate");
 
 // userrouter.use(express.static(path.join(__dirname, "/public"))); // to use the static files from the public folder
 
-// Serve static files from the frontend build directory
+// API routes - these should come before the catch-all route
+userrouter.get(  // this is the API route to get all listings
+  "/api/listings",
+  wrapAsync(async (req, res) => {
+    const allListings = await Listing.find({});
+    res.json(allListings);
+  })
+);
+
+userrouter.get(
+  "/api/listings/:id",
+  wrapAsync(async (req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
+    res.json(listing);
+  })
+);
+
+// Serve React app from the built dist directory
 userrouter.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-// API routes
-userrouter.get("/api/listings", async (req, res) => {
-  const allListings = await Listing.find({});
-  res.json(allListings);
-});
-
-userrouter.get("/api/listings/:id", async (req, res) => {
-  const listing = await Listing.findById(req.params.id);
-  res.json(listing);
-});
-
-// Serve React app only on root route
-userrouter.get("/", (req, res) => {
+// Serve React app for all other routes (SPA routing)
+userrouter.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
@@ -46,21 +79,15 @@ userrouter.get("/", (req, res) => {
 //   await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 // }
 
-userrouter.get("/", (req, res) => {
-  res.sendfile(path.join(__dirname, "../frontend/src/app.jsx")); // this line is used to send the app.js file from the frontend/src folder, which is the entry point of the React application.
-});
+// Note: The old EJS routes are commented out since we're now using React frontend
+// userrouter.get("/listings", wrapAsync(async (req, res) => {
+//   const allListings = await Listing.find({});
+//   res.render("listings/index.ejs", { allListings });
+// }));
 
-// indexroute to view all datas from db
-userrouter.get("/listings", async (req, res) => {
-  const allListings = await Listing.find({}); // here we are doing ".find()" method on Listing because it's our model name and all dbs based operations are done on models.
-  res.render("listings/index.ejs", { allListings });
-});
-
-//show route for particular listing , when tapping on a particular listing all its details will be shown
-userrouter.get("/listings/:id", async (req, res) => {
-  const listing = await Listing.findById(req.params.id); // all details will be fetched from here on the basis of id
-
-  res.render("listings/show.ejs", { listing });
-});
+// userrouter.get("/listings/:id", wrapAsync(async (req, res) => {
+//   const listing = await Listing.findById(req.params.id);
+//   res.render("listings/show.ejs", { listing });
+// }));
 
 module.exports = userrouter;

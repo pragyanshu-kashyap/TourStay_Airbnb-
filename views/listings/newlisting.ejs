@@ -25,52 +25,66 @@
 
             <div class="mb-3">
                 <label for="image" class="form-label">Image URL:</label>
-                <input type="text" name="image" placeholder="Image URL" class="form-control">
+                <input type="text" name="image" id="imageInput" placeholder="Image URL" class="form-control"
+                    oninput="updateImagePreview()">
                 <div class="invalid-feedback">
                     please enter a valid image URL.
                 </div>
+                <div class="mt-2">
+                    <img id="imagePreview" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop" alt="Image Preview"
+                        style="max-width: 300px; max-height: 200px; border: 1px solid #ccc;" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" name="price" placeholder="Price  (i.e: &#8377 1000)" class="form-control" required>
+                <div class="invalid-feedback">
+                    please enter a price. It should be a number !
+                </div>
 
                 <div class="mb-3">
-                    <label for="price" class="form-label">Price:</label>
-                    <input type="number" name="price" placeholder="Price  (i.e: &#8377 1000)" class="form-control"
-                        required>
+                    <label for="location" class="form-label">Location:</label>
+                    <input type="text" name="location" placeholder="Location" class="form-control" required>
                     <div class="invalid-feedback">
-                        please enter a price. It should be a number !
+                        please enter a location. It should be a valid location !
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="location" class="form-label">Location:</label>
-                        <input type="text" name="location" placeholder="Location" class="form-control" required>
+
+                <div class="mb-3">
+                    <label for="country" class="form-label">Country:</label>
+                    <input type="text" name="country" placeholder="Country" class="form-control" required>
+                    <div class="invalid-feedback">
+                        please enter a country. It should be a valid country !
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                        <label class="form-check-label" for="invalidCheck">
+                            Agree to terms and conditions
+                        </label>
                         <div class="invalid-feedback">
-                            please enter a location. It should be a valid location !
+                            You must agree before to our T&C before submitting.
                         </div>
                     </div>
+                </div>
 
 
-                    <div class="mb-3">
-                        <label for="country" class="form-label">Country:</label>
-                        <input type="text" name="country" placeholder="Country" class="form-control" required>
-                        <div class="invalid-feedback">
-                            please enter a country. It should be a valid country !
-                        </div>
-                    </div>
-
-
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                            <label class="form-check-label" for="invalidCheck">
-                                Agree to terms and conditions
-                            </label>
-                            <div class="invalid-feedback">
-                                You must agree before to our T&C before submitting.
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <button class="btn btn-success" type="submit">ADD</button>
+                <button class="btn btn-success" type="submit">ADD</button>
         </form>
     </div>
 
     </div>
+    <script>
+        function updateImagePreview() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            const defaultUrl = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop';
+            const url = input.value.trim();
+            preview.src = url === '' ? defaultUrl : url;
+        }
+    </script>
