@@ -9,6 +9,30 @@ const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap asyn
 const ExpressError = require("../utils/ExpressError.js"); // this is used to handle errors in our application, we will create our own error class to handle errors.
 const { listingSchema } = require("../schema.js"); // this is the schema we created to validate the data coming from the form
 
+
+const validateListing = (req, res, next) => {
+  // Reconstruct the listing object from flat fields
+  const listing = {
+    title: req.body.listing.title,
+    description: req.body.listing.description,
+    image: req.body.listing.image,
+    price: req.body.listing.price,
+    location: req.body.listing.location,
+    country: req.body.listing.country
+  };
+  // console.log(listing);
+  const { error } = listingSchema.validate(listing);
+  if (error) {
+    // console.log(error);
+    let errorMsg=error.details.map(el => el.message).join(',');
+    throw new ExpressError(400, errorMsg );
+  } else {
+    // Optionally attach validated listing to req for use in route handler
+    // req.validatedListing = listing;
+    next();
+  }
+};
+
 //create route for new listing
 adminrouter.get("/listings/new", (req, res, next) => {
   console.log("New listing page requested");
@@ -18,15 +42,8 @@ adminrouter.get("/listings/new", (req, res, next) => {
 //post route to save changes on db after creating new listings
 adminrouter.post(
   "/listings",
+  validateListing, // this will validate the data coming from the form before saving it to the database, if data is invalid then it will throw an error and the next middleware will not be executed.
   wrapAsync(async (req, res, next) => {
-    let result = listingSchema.validate(req.body); // validate the data coming from the form using the schema we created , ye ek taeeke se data ko validate karega or agar data valid hoga to result me ek object milega jisme error property undefined hogi or agar data invalid hoga to result me error property me error message milega.
-
-    console.log(result);
-
-    if (result.error) {
-      throw new ExpressError(400, result.error);
-    }
-
     const listing = new Listing(req.body.listing); // yha pe 'new' keyword k help se  Listing model ka ek or object banega jiske andar req.body.listing ka data hoga or usko "listing" variable me store krenge.
 
     await listing.save();
@@ -56,6 +73,7 @@ adminrouter.delete(
 //post route to save changes on db after editing listings
 adminrouter.post(
   "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
     listing.title = req.body.listing.title;
@@ -65,7 +83,8 @@ adminrouter.post(
     listing.location = req.body.listing.location;
     listing.country = req.body.listing.country;
     await listing.save();
-    res.redirect("/listings");
+    let { id } = req.params; // this will get the id from the url params
+    res.redirect(`/listings/${id}`); // this will redirect to the show page of the listing after saving the changes, so that we can see the updated listing.
   })
 );
 

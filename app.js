@@ -10,7 +10,10 @@ app.set("view engine", "ejs"); // this line is used to set the view engine to ej
 
 app.set("views", path.join(__dirname, "views")); // this line is used to set the views folder path, so that express can find the ejs templates in the views folder.
 
+app.use(express.json()); //ye
+
 app.use(express.urlencoded({ extended: true })); // this line is used to parse the incoming request body, so that we can access the form data in req.body.
+
 
 app.use(methodoverride("_method")); //
 

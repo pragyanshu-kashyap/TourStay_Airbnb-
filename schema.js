@@ -10,8 +10,8 @@ const Joi = require("joi");
 module.exports.listingSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
-  location: Joi.string().required(),
-  country: Joi.string().required(),
-  price: Joi.number().required().min(0), // Assuming price should be a positive number
   image: Joi.string().allow("", null), // Assuming image is a URL, you can adjust this if it's a file upload or something else that's not a URI.
+  price: Joi.number().required().min(0), // Assuming price should be a positive number
+  location: Joi.string().required(),
+  country: Joi.string().required()
 });
