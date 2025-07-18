@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const reviews = require("./review");
 const Schema = mongoose.Schema;
 
 const listingSchema = new Schema({
@@ -20,6 +21,12 @@ const listingSchema = new Schema({
   },
   location: String,
   country: String,
+  reviews:[ //one to few relation is being established here 
+    {
+      type:Schema.Types.ObjectId,
+      ref: "Review" // here we are refering to another collection named "reviews". made in review.js file
+    }
+  ]
 });
 
 const Listing = mongoose.model("Listing", listingSchema); // here we are creating a model named "Listing" from listingSchema which is defined above in this file., left side is the name of the model and right side is the schema which we created above.

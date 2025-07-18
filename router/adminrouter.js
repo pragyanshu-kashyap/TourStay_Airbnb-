@@ -44,7 +44,12 @@ adminrouter.post(
   "/listings",
   validateListing, // this will validate the data coming from the form before saving it to the database, if data is invalid then it will throw an error and the next middleware will not be executed.
   wrapAsync(async (req, res, next) => {
-    const listing = new Listing(req.body.listing); // yha pe 'new' keyword k help se  Listing model ka ek or object banega jiske andar req.body.listing ka data hoga or usko "listing" variable me store krenge.
+    const listing = new Listing(req.body.listing); // yha pe 'new' keyword k help se  Listing model ka ek or object banega jiske andar req.body.listing ka data hoga or usko "listing" variable me store krenge. 
+
+    //ek point note krne layak hai ki, form mai "name" k andar listing object k andar data store hoga qki yha req.body.listing will give us the data in the form of an object. 
+    // so we have to pass req.body.listing to the Listing model to create a new listing.
+    //eg:- name="listing[title]" will give us req.body.listing.title
+    //eg:- name="listing[description]" will give us req.body.listing.description
 
     await listing.save();
     res.redirect("/listings");
@@ -89,10 +94,11 @@ adminrouter.post(
 );
 
 //show route for particular listing , when a user clicks on a particular listing then he/she will be redirected to this route and here we are rendering the show ejs file which has all details of that particular listing in its context object.adminroutering on a particular listing all its details will be shown
+
 adminrouter.get(
   "/listings/:id",
   wrapAsync(async (req, res, next) => {
-    const listing = await Listing.findById(req.params.id); // all details will be fetched from here on the basis of id
+    const listing = await Listing.findById(req.params.id).populate("reviews"); // all details will be fetched from here on the basis of id
     res.render("listings/show.ejs", { listing });
   })
 );

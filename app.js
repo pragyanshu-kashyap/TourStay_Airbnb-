@@ -27,11 +27,11 @@ app.use(express.static(path.join(__dirname, "/public"))); // to use the static f
 const userrouter = require("./router/userrouter.js");
 const adminrouter = require("./router/adminrouter.js");
 
-main()
+main() //Async function call, returns a Promise 
   .then(() => console.log("Connected to MongoDB database"))
   .catch((err) => console.log(err));
 
-async function main() {
+async function main() { // function ki definition likhi hui hai (hoisting ke wajah se mil jaata hai).
   await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
 
