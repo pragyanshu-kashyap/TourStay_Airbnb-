@@ -1,10 +1,10 @@
 const express = require("express");
-const review = express.Router({ mergeParams: true }); // mergeParams is used to merge the params of the parent route (listings/:id) with the child route (reviews)
+const review = express.Router({ mergeParams: true }); // mergeParams is used to merge the params of the parent route (listings/:id) with the child route (reviews) or yaha pe humne review router ko mergeParams ke sath use kiya hai, taaki hum parent route se params ko access kar sakein, jaise ki listings/:id route se id ko access kar sakein.
+
+//yaha pe review child route hai jo ki listing ke andar aata hai
 
 const Listing = require("../models/listing.js");
 
-const methodoverride = require("method-override"); // this is used to override the default method of form submission, so that we can use PUT and DELETE methods in our forms.
-const ejsMate = require("ejs-mate");
 const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap async functions to handle errors
 const Review = require("../models/review.js");
 const { reviewSchema } = require("../schema.js");

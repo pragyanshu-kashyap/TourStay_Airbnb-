@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+
 const listing = express.Router();
 const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");

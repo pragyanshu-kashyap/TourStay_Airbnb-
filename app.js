@@ -72,8 +72,9 @@ app.use((req, res, next) => { // this middleware is used to set the flash messag
 });
 
 //local imports
-const listing = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js"); // user routes for authentication and user management
 
 main() //Async function call, returns a Promise
   .then(() => console.log("Connected to MongoDB database"))
@@ -85,9 +86,11 @@ async function main() {
 }
 
 //our routess
-app.use("/listings", listing);
-app.use("/listings/:id/reviews", reviews);
-// app.use("/api/listings", require("./routes/errorRoutes.js")); // API routes for error handling
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter); // this will mount the review router on the listings/:id/reviews route, so that we can access the reviews for a particular listing
+
+app.use("/", userRouter); // user routes for authentication and user management
+
 app.use("/", require("./routes/frontend.js")); // Serve React app for all other routes (SPA routing)
 
 

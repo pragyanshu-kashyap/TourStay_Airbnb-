@@ -1,0 +1,54 @@
+<% layout("./listings/layouts/boilerplate.ejs") -%>
+
+    <div class="row mt-3">
+        <div class="col-6 offset-3">
+            <h2>please SignUp</h2>
+
+            <form action="/signup" method="POST" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required />
+                    <div class="invalid-feedback">Please provide a username.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required />
+                    <div class="invalid-feedback">Please provide a valid email address.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" required />
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1">
+                            <span id="togglePasswordIcon" class="bi bi-eye"></span>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Please provide a strong password.</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <script>
+                    // Toggle password visibility
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const passwordInput = document.getElementById('password');
+                        const toggleBtn = document.getElementById('togglePassword');
+                        const toggleIcon = document.getElementById('togglePasswordIcon');
+                        if (toggleBtn && passwordInput && toggleIcon) {
+                            toggleBtn.addEventListener('click', function () {
+                                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                                passwordInput.type = type;
+                                // Toggle icon (Bootstrap Icons: bi-eye, bi-eye-slash)
+                                if (type === 'text') {
+                                    toggleIcon.classList.remove('bi-eye-slash');
+                                    toggleIcon.classList.add('bi-eye');
+
+                                } else {
+                                    toggleIcon.classList.remove('bi-eye');
+                                    toggleIcon.classList.add('bi-eye-slash');
+                                }
+                            });
+                        }
+                    });
+                </script>
+            </form>
+        </div>
+    </div>
