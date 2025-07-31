@@ -6,6 +6,19 @@ const path = require("path");
 const methodoverride = require("method-override"); // this is used to override the default method of form submission, so that we can use PUT and DELETE methods in our forms.
 const ejsMate = require("ejs-mate");
 
+const session = require("express-session"); // this is used to create a session for the user, so that we can store user data in the session
+
+const flash = require("connect-flash"); // this is used to flash messages to the user, so that we can show success or error messages to the user
+
+
+const passport = require("passport"); // this is used to authenticate the user, so that we can log in and log out the user
+const LocalStrategy = require("passport-local").Strategy; // this is used to authenticate the user, so that we can log in and log out the user
+const User = require("./models/user.js"); // this is used to import the User model, so that we can use it to authenticate the user
+
+// const cookieParser = require("cookie-parser"); // this is used to parse the cookies in the request, so that we can access the cookies in req.cookies in any other route
+
+// app.use(cookieParser()); // this line is used to parse the cookies in the request, so that we can access the cookies in req.cookies
+
 app.set("view engine", "ejs"); // this line is used to set the view engine to ejs, so that we can use ejs templates in our views folder.
 
 app.set("views", path.join(__dirname, "views")); // this line is used to set the views folder path, so that express can find the ejs templates in the views folder.
@@ -14,33 +27,75 @@ app.use(express.json()); //ye
 
 app.use(express.urlencoded({ extended: true })); // this line is used to parse the incoming request body, so that we can access the form data in req.body.
 
-
 app.use(methodoverride("_method")); //
 
 app.engine("ejs", ejsMate); // this line is used to use ejsMate as the template engine for ejs, which allows us to use layout files and partials in our ejs templates.
 
 app.use(express.static(path.join(__dirname, "/public"))); // to use the static files from the public folder
 
-// Note: Static file serving for React app is handled in userrouter.js
+const sessionConfig = {
+  secret: "mysupersecretcode", // secret key to sign the session ID cookie
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true, // prevents client-side JavaScript from accessing the cookie
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 day
+    maxAge: 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 day
+  },
+};
+app.use(session(sessionConfig)); // this line is used to use express-session middleware, which allows us to create a session for the user
+
+app.use(flash()); // this line is used to use connect-flash middleware, which allows us to flash messages to the user
+
+
+
+app.use(passport.initialize()); // this line is used to initialize passport middleware, which allows us to use passport for authentication
+app.use(passport.session()); // this line is used to use passport session middleware, which allows us to store user data in the session 
+
+passport.use(new LocalStrategy(User.authenticate())); // this line is used to use the local strategy for authentication, which allows us to authenticate the user using username and password
+
+passport.serializeUser(User.serializeUser()); // this line is used to serialize the user, which allows us to store the user ID in the session
+
+passport.deserializeUser(User.deserializeUser()); // this line is used to deserialize the user, which allows us to retrieve the user data from the session using the user ID stored in the session
+
+
+
+
+app.use((req, res, next) => { // this middleware is used to set the flash messages in res.locals, so that we can access them in our ejs templates
+
+  res.locals.success = req.flash("success"); // this line is used to set the success message in res.locals, so that we can access it in our ejs templates
+  res.locals.deletesuccess = req.flash("deletesuccess"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
+
+  res.locals.error = req.flash("error"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
+  
+  next(); // this line is used to call the next middleware in the stack, so that the request can continue to the next middleware or route handler
+});
 
 //local imports
-const userrouter = require("./router/userrouter.js");
-const adminrouter = require("./router/adminrouter.js");
+const listing = require("./routes/listing.js");
+const reviews = require("./routes/review.js");
 
-main() //Async function call, returns a Promise 
+main() //Async function call, returns a Promise
   .then(() => console.log("Connected to MongoDB database"))
   .catch((err) => console.log(err));
 
-async function main() { // function ki definition likhi hui hai (hoisting ke wajah se mil jaata hai).
+async function main() {
+  // function ki definition likhi hui hai (hoisting ke wajah se mil jaata hai).
   await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
 
-//our routers
-app.use(adminrouter);
-app.use(userrouter);
+//our routess
+app.use("/listings", listing);
+app.use("/listings/:id/reviews", reviews);
+// app.use("/api/listings", require("./routes/errorRoutes.js")); // API routes for error handling
+app.use("/", require("./routes/frontend.js")); // Serve React app for all other routes (SPA routing)
 
-// Note: The catch-all route is now handled in userrouter.js for SPA routing
-// API routes are handled before the catch-all route
+
+
+app.all("*", (req, res) => {
+  // Catch-all route to handle 404 errors for unmatched routes
+  res.status(404).render("listings/404error", { error: "Page Not Found" });
+}); // Catch-all route to handle 404 errors for unmatched routes
 
 // Global error handling middleware to handle errors
 app.use((err, req, res, next) => {
@@ -50,9 +105,7 @@ app.use((err, req, res, next) => {
     // to render the 404 page if the error is a 404, and otherwise show a generic error message.
     return res.status(404).render("listings/404error", { error: message });
   }
-  res
-    .status(statusCode)
-    .render("listings/404error", { error: message }); // You can create a generic error.ejs if you want
+  res.status(statusCode).render("listings/404error", { error: message }); // You can create a generic error.ejs if you want
 });
 
 // // agar koi route match nahi hota hai to yha iss middleware pe hit hoga or 404 error page show hoga

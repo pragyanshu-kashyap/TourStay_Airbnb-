@@ -22,7 +22,10 @@
     <!-- <h1>This is my travel website</h1> -->
     <%- include("../../includes/navbar.ejs") %>  <!-- the include statement to use a relative path instead of an absolute path. Since boilerplate.ejs is in layouts, the relative path to navbar.ejs would be ../../includes/navbar.ejs.-->
 
-    <div class="container"><%- body %></div>
+    <div class="container">
+      <%- include("../../includes/flash.ejs") %> <!-- this is to include the flash messages, which are set in the routes/listing.js file using req.flash() method. -->
+      <%- body %>
+    </div>
     
     <%- include("../../includes/footer.ejs") %>
 
