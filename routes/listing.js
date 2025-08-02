@@ -8,7 +8,10 @@ const methodoverride = require("method-override"); // this is used to override t
 const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap async functions to handle errors
 const ExpressError = require("../utils/ExpressError.js"); // this is used to handle errors in our application, we will create our own error class to handle errors.
 const { listingSchema } = require("../schema.js"); // this is the schema we created to validate the data coming from the form
+const { isLoggedIn} = require("../middleware.js"); // importing the middleware functions we created to check if the user is logged in
 
+
+//route to get all listings - Index route
 listing.get(
   // this is the route to get all listings
   "/",
@@ -24,8 +27,10 @@ function isValidObjectId(id) {
 }
 
 //create route for new listing
-listing.get("/new", (req, res, next) => {
-  console.log("New listing page requested");
+listing.get("/new",isLoggedIn, (req, res) => { //isLoggedIn middleware will check if the user is authenticated or not, if not then it will redirect to the login page with a flash message. if the user is authenticated then next middleware will be called which is the route handler for creating a new listing.
+  // console.log("New listing page requested");
+  
+  
   res.render("listings/newlisting.ejs"); //render hmesha views folder ke andar se hi file ko render karega, so we don't have to provide the full path of the file, just the name of the file is enough.
 });
 
@@ -94,7 +99,7 @@ listing.post(
 
 //edit route for A  particular listing
 listing.get(
-  "/:id/edit",
+  "/:id/edit",isLoggedIn,
   wrapAsync(async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
     if(!listing) {
@@ -109,7 +114,7 @@ listing.get(
 
 //delete route for A  particular listing
 listing.delete(
-  "/:id",
+  "/:id",isLoggedIn,
   wrapAsync(async (req, res) => {
     const deletedListing = await Listing.findByIdAndDelete(req.params.id); // the findByIdAndDelete method triggers pre and post middleware hooks defined in the schema, allowing you to execute custom logic before or after a document is deleted.
 

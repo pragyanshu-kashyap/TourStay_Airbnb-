@@ -1,118 +1,160 @@
-body{
-    background-color: rgb(156, 223, 173);
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+body {
+  background-color: #f4faff !important; /* soft sky blue */
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.navbar{
-    height: 5rem;
-    background-color: rgb(255, 255, 255);
+.navbar {
+  height: 5rem;
+  background-color: #38b6ff; /* vibrant teal/sky blue */
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(56, 182, 255, 0.08);
 }
 
-.fa-route{
-    color: #fe424d;
-    font-size: 2rem;
+.fa-route {
+  color: #ffbe76; /* gold accent */
+  font-size: 2rem;
 }
 
-.nav-link{
-    color: #222222 !important;
-    font-size: 1.2rem !important;
+.nav-link {
+  color: #fff !important;
+  font-size: 1.2rem !important;
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: #ffbe76 !important;
 }
 
 /* footer */
 .f-info-links a {
-    text-decoration: none;
-    color: #222222;
+  text-decoration: none;
+  color: #ffbe76;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 .f-info-links a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+  color: #fff;
 }
 
-.f-info-links , .f-info-socials , .f-info-brand {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.f-info-socials i{
-    margin-right: 1rem;
-    font-size: 1.2rem;
+.f-info-socials i {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  color: #ffbe76;
+  transition: color 0.2s;
+}
+.f-info-socials i:hover {
+  color: #38b6ff;
 }
 
 .f-info {
-    height: 6rem;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background-color: rgb(177, 183, 255);
-    
+  height: 6rem;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: #003049; /* deep navy for footer */
+  color: #fff;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+footer {
+  margin-top: auto;
+  width: 100%;
+  background: #003049;
 }
 
 /* cards */
-.listing-card{
-    border: none !important;
-    margin-bottom: 2rem;   
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+  background: #fff !important;
+  box-shadow: 0 2px 16px 0 rgba(56, 182, 255, 0.08);
+  border-radius: 1rem !important;
 }
 
-.card-img-top{
-    border-radius: 1rem !important;
-    width: 100% !important;
-    object-fit: cover !important;
-    height: 20rem !important;
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  height: 20rem !important;
 }
 
-.card-body{
-    padding: 1rem !important;
-    text-align: center !important;
+.card-body {
+  padding: 1rem !important;
+  text-align: center !important;
+  background: #f4faff !important;
 }
 
-.card-text{
-    font-weight: 400 !important;
+.card-text {
+  font-weight: 400 !important;
+  color: #003049;
 }
 
-.listing-link{
-    text-decoration: none !important;
+.listing-link {
+  text-decoration: none !important;
 }
 
 /* card effect */
-.card:hover{
-    transform: scale(1.05) !important;
-    transition: all 0.3s ease-in-out !important;
+.card:hover {
+  transform: scale(1.05) !important;
+  transition: all 0.3s ease-in-out !important;
 }
 
-.card-img-overlay{
-    opacity: 0;
+.card-img-overlay {
+  opacity: 0;
 }
 
-.card-img-overlay:hover{ /*jb hm hover krenge tb hi opacity change hoga aur jo text class card-img-overlay mai hoga wo visible hoga*/
-    opacity: 0.25 !important;
-    background-color: white !important;
-    
+.card-img-overlay:hover {
+  /*jb hm hover krenge tb hi opacity change hoga aur jo text class card-img-overlay mai hoga wo visible hoga*/
+  opacity: 0.25 !important;
+  background-color: white !important;
 }
 
 /* show-listings */
-.row .btns{
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 2vh;
-    margin-top: 1vh;
-    
-    
+.row .btns {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 2vh;
+  margin-top: 1vh;
 }
 
-.row .btns .btnEdit button{
-    background-color: #1b1415;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+.row .btns .btnEdit button {
+  background-color: #38b6ff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+.row .btns .btnEdit button:hover {
+  background-color: #ffbe76;
+  color: #003049;
 }
 
-.row .btns .btnDel button{
-    background-color: #d8414b;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+.row .btns .btnDel button {
+  background-color: #ff6f61;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+.row .btns .btnDel button:hover {
+  background-color: #003049;
+  color: #fff;
 }

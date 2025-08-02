@@ -11,6 +11,6 @@ const userSchema = new Schema({
 
 });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose); // This plugin adds username and password fields to the schema, along with methods for hashing and authenticating passwords.
 
 module.exports = mongoose.model('User', userSchema);

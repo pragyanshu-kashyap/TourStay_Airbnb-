@@ -13,6 +13,7 @@ const flash = require("connect-flash"); // this is used to flash messages to the
 
 const passport = require("passport"); // this is used to authenticate the user, so that we can log in and log out the user
 const LocalStrategy = require("passport-local").Strategy; // this is used to authenticate the user, so that we can log in and log out the user
+
 const User = require("./models/user.js"); // this is used to import the User model, so that we can use it to authenticate the user
 
 // const cookieParser = require("cookie-parser"); // this is used to parse the cookies in the request, so that we can access the cookies in req.cookies in any other route
@@ -60,6 +61,9 @@ passport.deserializeUser(User.deserializeUser()); // this line is used to deseri
 
 
 
+//koi bhi variable jisko hum direct ejs mai nhi use kr sakte hain, usko hum res.locals me store krte hain, taaki wo variable ejs templates me accessible ho sake. 
+// As for example, we can use res.locals.currentUser to access the current user in ejs templates.
+// This is useful for rendering user-specific data in the templates, such as showing the user's name in the navigation bar.
 
 app.use((req, res, next) => { // this middleware is used to set the flash messages in res.locals, so that we can access them in our ejs templates
 
@@ -67,6 +71,8 @@ app.use((req, res, next) => { // this middleware is used to set the flash messag
   res.locals.deletesuccess = req.flash("deletesuccess"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
 
   res.locals.error = req.flash("error"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
+
+  res.locals.currentUser = req.user; // this line is used to set the current user in res.locals, so that we can access it in our ejs templates
   
   next(); // this line is used to call the next middleware in the stack, so that the request can continue to the next middleware or route handler
 });
