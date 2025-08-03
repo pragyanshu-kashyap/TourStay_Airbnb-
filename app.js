@@ -72,7 +72,9 @@ app.use((req, res, next) => { // this middleware is used to set the flash messag
 
   res.locals.error = req.flash("error"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
 
-  res.locals.currentUser = req.user; // this line is used to set the current user in res.locals, so that we can access it in our ejs templates
+  res.locals.currentUser = req.user; // this line is used to set the current user in res.locals, so that we can access it in our ejs templates or anywhere else in our app
+
+  res.locals.redAlert = req.flash("redAlert"); // this line is used to set the red alert message in res.locals, so that we can access it in our ejs templates
   
   next(); // this line is used to call the next middleware in the stack, so that the request can continue to the next middleware or route handler
 });

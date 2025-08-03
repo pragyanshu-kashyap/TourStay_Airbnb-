@@ -26,7 +26,12 @@ const listingSchema = new Schema({
       type:Schema.Types.ObjectId,
       ref: "Review" // here we are refering to another collection named "reviews". made in review.js file
     }
-  ]
+  ],
+  owner:{
+    type: Schema.Types.ObjectId,
+    ref: "User", // here we are refering to another collection named "users". made in user.js file
+  
+  }
 });
 
 listingSchema.post("findOneAndDelete", async function (listing) {

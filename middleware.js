@@ -1,3 +1,11 @@
+const Listing = require("./models/listing.js"); // importing the listings model to interact with the database
+const ExpressError = require("./utils/ExpressError.js"); // this is used to handle errors in our application, we will create our own error class to handle errors.
+const { listingSchema ,  reviewSchema} = require("./schema.js"); // this is the schema we created to validate the data coming from the form
+
+
+
+
+
 module.exports.isLoggedIn = (req, res, next) => {
 
   //console.log(req.user); // this will log the user object if the user is authenticated, otherwise it will be undefined. iss line ko use krke humara login , logout or signUp buttons ko render krwaayenge navbar.ejs file mai . Go and check it out
@@ -34,3 +42,67 @@ module.exports.saveRedirectUrl = (req, res, next) => {
   next(); // Call the next middleware function in the stack
 };
 
+module.exports.isOwner = async(req, res, next) => {
+  // This middleware checks if the current user is the owner of the listing
+  let { id } = req.params; // this will get the id from the url params and store it in the id variable.
+
+    let listing = await Listing.findById(id); // this will find the listing by id and store it in the listing variable.
+    if(!listing.owner._id.equals(res.locals.currentUser._id)) { // this will check if the owner of the listing is the same as the current user, if not then it will throw an error.
+      req.flash("redAlert", "You are not authorized to do this action on this listing !!");
+      return res.redirect(`/listings/${id}`);
+    }
+    next(); // If the user is the owner, call the next middleware function in the stack
+};
+
+module.exports.validateListing = (req, res, next) => {
+  // Reconstruct the listing object from flat fields
+  const listing = {
+    title: req.body.listing.title,
+    description: req.body.listing.description,
+    image: req.body.listing.image,
+    price: req.body.listing.price,
+    location: req.body.listing.location,
+    country: req.body.listing.country,
+  };
+  // console.log(listing);
+  const { error } = listingSchema.validate(listing);
+  if (error) {
+    // console.log(error);
+    let errorMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errorMsg);
+  } else {
+    // Optionally attach validated listing to req for use in route handler
+    // req.validatedListing = listing;
+    next();
+  }
+};
+
+
+
+//function for the server side validation of the review model , which is to be used as  middleware
+module.exports.validateReview = (req, res, next) => {
+  // Log the entire request body
+  console.log("req.body:", req.body);
+
+  // Log the review object specifically
+  console.log("req.body.review:", req.body.review);
+
+  if (!req.body.review) {
+    throw new ExpressError(400, "Review data is required.");
+  }
+
+  // Log what is being sent to Joi
+  console.log("Validating with Joi:", req.body.review);
+
+  const { error } = reviewSchema.validate(req.body.review);
+
+  // Log the Joi error, if any
+  console.log("Joi validation error:", error);
+
+  if (error) {
+    let errorMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errorMsg);
+  } else {
+    next();
+  }
+};

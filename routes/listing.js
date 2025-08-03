@@ -6,9 +6,10 @@ const Listing = require("../models/listing.js");
 const path = require("path");
 const methodoverride = require("method-override"); // this is used to override the default method of form submission, so that we can use PUT and DELETE methods in our forms.
 const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap async functions to handle errors
-const ExpressError = require("../utils/ExpressError.js"); // this is used to handle errors in our application, we will create our own error class to handle errors.
-const { listingSchema } = require("../schema.js"); // this is the schema we created to validate the data coming from the form
+
 const { isLoggedIn} = require("../middleware.js"); // importing the middleware functions we created to check if the user is logged in
+const { isOwner } = require("../middleware.js"); // importing the middleware function to check if the user is the owner of the listing
+const { validateListing } = require("../middleware.js"); // importing the middleware function to validate the listing data coming from the form
 
 
 //route to get all listings - Index route
@@ -45,7 +46,9 @@ listing.get(
         .status(404)
         .render("listings/404error", { error: "Invalid listing id" });
     }
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id).populate("reviews").populate("owner") ; // this will fetch the listing by id and populate the reviews field with the associated reviews.
+
+    //populate method is used to populate any field which is a reference to another document (like here the reviews field and the owner field), so that we can display the reviews and owner on the show page of the listing , since they can't be fetched directly from the database like normal fields like title, description, image, price, location, country because they are references to other documents.
     if (!listing) {
       return res
         .status(404)
@@ -55,28 +58,7 @@ listing.get(
   })
 );
 
-const validateListing = (req, res, next) => {
-  // Reconstruct the listing object from flat fields
-  const listing = {
-    title: req.body.listing.title,
-    description: req.body.listing.description,
-    image: req.body.listing.image,
-    price: req.body.listing.price,
-    location: req.body.listing.location,
-    country: req.body.listing.country,
-  };
-  // console.log(listing);
-  const { error } = listingSchema.validate(listing);
-  if (error) {
-    // console.log(error);
-    let errorMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errorMsg);
-  } else {
-    // Optionally attach validated listing to req for use in route handler
-    // req.validatedListing = listing;
-    next();
-  }
-};
+
 
 //post route to save changes on db after creating new listings
 listing.post(
@@ -89,6 +71,13 @@ listing.post(
     // so we have to pass req.body.listing to the Listing model to create a new listing.
     //eg:- name="listing[title]" will give us req.body.listing.title
     //eg:- name="listing[description]" will give us req.body.listing.description
+
+    listing.owner = req.user._id; // here we have not provided any field to the form to select the owner of the listing, so we are setting it to the current user who is creating the listing. 
+    // by default passport js will attach the user object to the request object with all details , as req.user when the user is authenticated, so we can access the user id from req.user._id.
+    // req.user._id will give us the id of the user who is currently logged in
+   
+
+    
 
     await listing.save();
     req.flash("success", "Listing created successfully !!"); // this will flash a success message to the user after creating the listing.
@@ -114,7 +103,7 @@ listing.get(
 
 //delete route for A  particular listing
 listing.delete(
-  "/:id",isLoggedIn,
+  "/:id",isLoggedIn, isOwner,
   wrapAsync(async (req, res) => {
     const deletedListing = await Listing.findByIdAndDelete(req.params.id); // the findByIdAndDelete method triggers pre and post middleware hooks defined in the schema, allowing you to execute custom logic before or after a document is deleted.
 
@@ -130,18 +119,12 @@ listing.delete(
 
 //post route to save changes on db after editing listings
 listing.post(
-  "/:id",
+  "/:id",isLoggedIn,isOwner,
+  //isOwner middleware will check if the current user is the owner of the listing, if not then it will throw an error and redirect to the show page of the listing with a flash message.
   validateListing,
   wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    listing.title = req.body.listing.title;
-    listing.description = req.body.listing.description;
-    listing.image = req.body.listing.image;
-    listing.price = req.body.listing.price;
-    listing.location = req.body.listing.location;
-    listing.country = req.body.listing.country;
-    await listing.save();
-    let { id } = req.params; // this will get the id from the url params
+    const { id } = req.params; // this will get the id from the url params and store it in the id variable.
+    await Listing.findByIdAndUpdate(id,{...req.body.listing}); // this will update the listing with the new data coming from the form.
 
     req.flash("success", "Listing updated successfully");
     // this will flash a success message to the user after updating the listing.

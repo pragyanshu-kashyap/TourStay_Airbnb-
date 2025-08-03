@@ -7,36 +7,10 @@ const Listing = require("../models/listing.js");
 
 const wrapAsync = require("../utils/wrapAsync.js"); // this is used to wrap async functions to handle errors
 const Review = require("../models/review.js");
-const { reviewSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
+const { validateReview } = require("../middleware.js"); // importing the middleware function to validate the review data coming from the form
 
-//function for the server side validation of the review model , which is to be used as  middleware
-const validateReview = (req, res, next) => {
-  // Log the entire request body
-  console.log("req.body:", req.body);
 
-  // Log the review object specifically
-  console.log("req.body.review:", req.body.review);
-
-  if (!req.body.review) {
-    throw new ExpressError(400, "Review data is required.");
-  }
-
-  // Log what is being sent to Joi
-  console.log("Validating with Joi:", req.body.review);
-
-  const { error } = reviewSchema.validate(req.body.review);
-
-  // Log the Joi error, if any
-  console.log("Joi validation error:", error);
-
-  if (error) {
-    let errorMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errorMsg);
-  } else {
-    next();
-  }
-};
 
 //reviews post route , here validateReview middleware is used to validate server side using jOI
 review.post(
