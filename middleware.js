@@ -1,6 +1,7 @@
 const Listing = require("./models/listing.js"); // importing the listings model to interact with the database
 const ExpressError = require("./utils/ExpressError.js"); // this is used to handle errors in our application, we will create our own error class to handle errors.
 const { listingSchema ,  reviewSchema} = require("./schema.js"); // this is the schema we created to validate the data coming from the form
+const Review = require("./models/review.js"); // importing the review model to interact with the database
 
 
 
@@ -105,4 +106,17 @@ module.exports.validateReview = (req, res, next) => {
   } else {
     next();
   }
+};
+
+
+module.exports.isReviewAuthor = async(req, res, next) => {
+  // This middleware checks if the current user is the author of the review
+  let {id ,reviewId } = req.params; // this will get the reviewId from the url params and store it in the reviewId variable.
+
+    let review = await Review.findById(reviewId); // this will find the listing by id and store it in the listing variable.
+    if(!review.author._id.equals(res.locals.currentUser._id)) { // this will check if the owner of the listing is the same as the current user, if not then it will throw an error.
+      req.flash("redAlert", "You are not the author of this review !!");
+      return res.redirect(`/listings/${id}`);
+    }
+    next(); // If the user is the owner, call the next middleware function in the stack
 };
