@@ -11,21 +11,29 @@ const { isLoggedIn} = require("../middleware.js"); // importing the middleware f
 const { isOwner } = require("../middleware.js"); // importing the middleware function to check if the user is the owner of the listing
 const { validateListing } = require("../middleware.js"); // importing the middleware function to validate the listing data coming from the form
 
+const multer  = require('multer'); // this is used to handle file uploads in forms
+// multer will handle the file uploads and store them in the specified directory, we will use it to handle the image uploads in the new listing form.
+
+const {storage} = require('../cloudConfig.js'); // importing the cloudinary storage configuration we created to handle file uploads to Cloudinary
+
+// const upload = multer({ dest : 'uploads/' }); // this will create a new instance of multer with the specified destination for file uploads.
+
+const upload = multer({ storage }); // this will create a new instance of multer with the cloudinary storage configuration, and it will handle the file uploads in the new listing form and will upload it to the cloudinary storage.
+
 const listingController = require("../controllers/listings.js"); // importing the controller functions for listings
 
 listing.route("/")
   .get(wrapAsync(listingController.index)) // this is the route to get all listings and render the index view
   .post(
-    validateListing, // this will validate the data coming from the form before saving it to the database, if data is invalid then it will throw an error and the next middleware will not be executed.
-    wrapAsync(listingController.createListing)
-  );
+    isLoggedIn, // this will check if the user is logged in before allowing them to do any action , whereever we want to check if the user is logged in we will use this middleware function.
 
-//route to get all listings - Index route
-// listing.get(
-//   // this is the route to get all listings
-//   "/",
-//   wrapAsync( listingController.index) // using the index function from the controller to get all listings and render the index view)
-// );
+    upload.single('listing[image]'),// this middleware will handle the file upload when the user submits the new listing form, and it will save the file in the cloudinary storage.
+    
+    validateListing, // this will validate the data coming from the form before saving it to the database, if data is invalid then it will throw an error and the next middleware will not be executed.
+    
+    wrapAsync(listingController.createListing)
+  ); // this is the route to create a new listing and save it to the database, it will check if the user is logged in and if the data is valid before saving it to the database.
+ 
 
 
 //create route for new listing

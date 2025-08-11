@@ -4,7 +4,7 @@
     <div class="col-8 offset-2 mt-2 mb-2">
         <h2>Add a new listing</h2>
 
-        <form action="/listings" method="POST" class="needs-validation" novalidate>
+        <form action="/listings" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
 
             <div class="mb-3">
                 <label for="title" class="form-label"> Add a Catchy Title:</label>
@@ -24,17 +24,10 @@
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Image URL:</label>
-                <input type="text" name="listing[image]" id="imageInput" placeholder="Image URL" class="form-control"
-                    oninput="updateImagePreview()">
-                <div class="invalid-feedback">
-                    please enter a valid image URL.
-                </div>
-                <div class="mt-2">
-                    <img id="imagePreview" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop" alt="Image Preview"
-                        style="max-width: 300px; max-height: 200px; border: 1px solid #ccc;" />
-                </div>
-            </div>
+                <label for="image" class="form-label">Upload Image :</label>
+                <input type="file" name="listing[image]" id="imageInput" placeholder="Image URL" class="form-control"
+                />
+            </div>  
 
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>
@@ -79,12 +72,3 @@
     </div>
 
     </div>
-    <script>
-        function updateImagePreview() {
-            const input = document.getElementById('imageInput');
-            const preview = document.getElementById('imagePreview');
-            const defaultUrl = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop';
-            const url = input.value.trim();
-            preview.src = url === '' ? defaultUrl : url;
-        }
-    </script>

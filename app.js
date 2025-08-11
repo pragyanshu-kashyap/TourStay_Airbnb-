@@ -1,5 +1,12 @@
 const express = require("express");
 const app = express();
+
+
+if(process.env.NODE_ENV !== "production") {// this will check if the environment is not production, then it will load the environment variables from the .env file , only in development mode.
+
+  require("dotenv").config(); // this will load the environment variables from the .env file
+};
+
 const mongoose = require("mongoose");
 // const Listing = require("./models/listing.js");
 const path = require("path");

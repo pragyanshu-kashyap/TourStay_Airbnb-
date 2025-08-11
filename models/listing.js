@@ -8,13 +8,8 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    default:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop", // default image, when the image is not uploaded , undefined or in short doesn't exist.
-    set: (v) =>
-      !v || v.trim() === ""
-        ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop"
-        : v, // by this way we can set default value for image or any other field based on any condition. this case is for when image is uploaded but is empty
+    url: String,
+    filename: String,
   },
   price: {
     type: Number,
