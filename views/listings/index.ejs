@@ -4,42 +4,161 @@
     iss line k wajah se dono file(footer and navbar) serve hoga. */%>
 
     <body>
-          <h2>All listings !</h2>
+      <style>
+        #filters {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+        }
 
-          <br>
+        .filter {
+          text-align: center;
+          margin-right: 2rem;
+          margin-top: 1rem;
+          opacity: 0.7;
+        }
+        .filter p {
+          font-size: 0.8rem;
+        }
 
-          <!-- <button><a href="/listings/new">Add a new listing</a></button> another better way to do this is given below -->
+        .filter:hover {
+          opacity: 1;
+          cursor: pointer;
+        }
 
-          <!-- NOTE:- anchor tag ka matlab hi hota hai GET request , isiliye anchor tag use krte time hm koi method mention nhi krte hai -->
+        #tax-info {
+          display: none;
+        }
 
-          <!-- <form action="/listings/new" method="GET">
-    <button>Add a new listing</button>
-   </form> --> <!-- this is not required anymore cause now we can use anchor tag in navbar -->
+        .tax-toggle {
+          border: 1px solid #000000;
+          border-radius: 1rem;
+          height: 3rem;
+          padding: 1rem;
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+        }
+      </style>
 
-          <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ">
-            <%for(let listing of allListings){%>
-              <a href="/listings/<%=listing._id %>"
-                class="listing-link"><!-- // is tareeke se hm pure card ko anchor tag bna sakte hai, jisse ki jab bhi user card pe click karega toh wo particular listing page pe chale jaayega -->
-                <div class="card col listing-card">
-                  <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image">
-                  <div class="card-img-overlay"> pk</div>
-                  <div class="card-body" style="background-color: #d8bee7;">
-                    <p class="card-text">
-                      <b>
-                        <%= listing.title %><br>
-                      </b>
-                      &#8377 <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>/night<br>
-                        <%= listing.description %><br>
-                    </p>
-                  </div>
-                </div>
-                <% } %>
-              </a>
+      <div id="filters">
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-fire"></i>
+            <p>Trending</p>
           </div>
+        </div>
 
-          <!-- <ul>
-    //<%for(let listing of allListings){%>
-   // <li><a href="/listings/<%=listing._id %>"><%= listing.title %></a></li>
-   // <% } %>
-  </ul> -->
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-bed"></i>
+            <p>Rooms</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-mountain-city"></i>
+            <p>Iconic cities</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-mountain"></i>
+            <p>Mountain views</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-campground"></i>
+            <p>Campings</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-snowman"></i>
+            <p>Arctic</p>
+          </div>
+        </div>
+
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-person-swimming"></i>
+            <p>Amazing pools</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-brands fa-fort-awesome"></i>
+            <p>Castles</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-cow"></i>
+            <p>Farms</p>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-ship"></i>
+            <p>House boats</p>
+          </div>
+        </div>
+
+        <div class="tax-toggle">
+          <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1  mt-3">
+        <%for(let listing of allListings){%>
+          <a href="/listings/<%=listing._id %>"
+            class="listing-link"><!-- // is tareeke se hm pure card ko anchor tag bna sakte hai, jisse ki jab bhi user card pe click karega toh wo particular listing page pe chale jaayega -->
+            <div class="card col listing-card">
+              <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image">
+              <div class="card-img-overlay"> pk</div>
+              <div class="card-body" style="background-color: #d8bee7;">
+                <p class="card-text">
+                  <b>
+                    <%= listing.title %><br>
+                  </b>
+                  &#8377 <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>/night &nbsp;
+                    <i class="tax-info"> &nbsp;+18% GST</i>
+                    <br>
+                    <%= listing.description %><br>
+
+                </p>
+              </div>
+            </div>
+            <% } %>
+          </a>
+      </div>
     </body>
+
+    <script>
+      let taxToggle = document.getElementById("switchCheckDefault");
+      taxToggle.addEventListener("click", (event) => {
+        let taxInfo = document.getElementsByClassName("tax-info");
+        if (taxToggle.checked) {
+          for (let i = 0; i < taxInfo.length; i++) {
+            taxInfo[i].style.display = "block";
+          }
+        } else {
+          for (let i = 0; i < taxInfo.length; i++) {
+            taxInfo[i].style.display = "none";
+          }
+        }
+      });
+    </script>

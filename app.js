@@ -1,12 +1,10 @@
-const express = require("express");
-const app = express();
-
-
 if(process.env.NODE_ENV !== "production") {// this will check if the environment is not production, then it will load the environment variables from the .env file , only in development mode.
-
+  
   require("dotenv").config(); // this will load the environment variables from the .env file
 };
 
+const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
 // const Listing = require("./models/listing.js");
 const path = require("path");
@@ -15,17 +13,31 @@ const ejsMate = require("ejs-mate");
 
 const session = require("express-session"); // this is used to create a session for the user, so that we can store user data in the session
 
+const MongoStore = require('connect-mongo');  
 const flash = require("connect-flash"); // this is used to flash messages to the user, so that we can show success or error messages to the user
-
 
 const passport = require("passport"); // this is used to authenticate the user, so that we can log in and log out the user
 const LocalStrategy = require("passport-local").Strategy; // this is used to authenticate the user, so that we can log in and log out the user
-
 const User = require("./models/user.js"); // this is used to import the User model, so that we can use it to authenticate the user
 
 // const cookieParser = require("cookie-parser"); // this is used to parse the cookies in the request, so that we can access the cookies in req.cookies in any other route
-
 // app.use(cookieParser()); // this line is used to parse the cookies in the request, so that we can access the cookies in req.cookies
+
+//local imports
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js"); // user routes for authentication and user management
+
+const dbUrl = process.env.ATLASDB_URL; //this is string got from atlas ,stored on.env file . with the help of this url we are connecting to the Atlas DB
+
+main() //Async function call, returns a Promise
+  .then(() => console.log("Connected to MongoDB database"))
+  .catch((err) => console.log(err));
+
+async function main() {
+  // function ki definition likhi hui hai (hoisting ke wajah se mil jaata hai).
+  await mongoose.connect(dbUrl);
+}
 
 app.set("view engine", "ejs"); // this line is used to set the view engine to ejs, so that we can use ejs templates in our views folder.
 
@@ -38,25 +50,38 @@ app.use(express.urlencoded({ extended: true })); // this line is used to parse t
 app.use(methodoverride("_method")); //
 
 app.engine("ejs", ejsMate); // this line is used to use ejsMate as the template engine for ejs, which allows us to use layout files and partials in our ejs templates.
-
 app.use(express.static(path.join(__dirname, "/public"))); // to use the static files from the public folder
 
-const sessionConfig = {
-  secret: "mysupersecretcode", // secret key to sign the session ID cookie
+
+const store = MongoStore.create({ // this creates a new MongoDB store for session data
+  mongoUrl: dbUrl, // MongoDB connection string jo ki hme Atlas DB me connect karne me madad karega
+  crypto: {
+    secret: process.env.SECRET, // secret key to sign the session ID cookie
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", function (e) { // this line is used to handle errors in the MongoDB store
+  console.log("Mongo Session Store Error", e);
+});
+
+const sessionConfig = { // session configuration object
+  store, //iss line k help se ab hmare session ki information Atlas DB me store hogi , jo pehle locally store ho rhi thi
+  secret: process.env.SECRET, // secret key to sign the session ID cookie
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true, // prevents client-side JavaScript from accessing the cookie
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 day
-    maxAge: 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 day
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7, // cookie will expire after 1 week
   },
 };
-app.use(session(sessionConfig)); // this line is used to use express-session middleware, which allows us to create a session for the user
+
+
+
+app.use(session(sessionConfig)); // this line is used to use express-session middleware, which allows us to create a session for the user and gets all its information from the session store by "req.user". 
 
 app.use(flash()); // this line is used to use connect-flash middleware, which allows us to flash messages to the user
-
-
-
 app.use(passport.initialize()); // this line is used to initialize passport middleware, which allows us to use passport for authentication
 app.use(passport.session()); // this line is used to use passport session middleware, which allows us to store user data in the session 
 
@@ -86,27 +111,13 @@ app.use((req, res, next) => { // this middleware is used to set the flash messag
   next(); // this line is used to call the next middleware in the stack, so that the request can continue to the next middleware or route handler
 });
 
-//local imports
-const listingRouter = require("./routes/listing.js");
-const reviewRouter = require("./routes/review.js");
-const userRouter = require("./routes/user.js"); // user routes for authentication and user management
 
-main() //Async function call, returns a Promise
-  .then(() => console.log("Connected to MongoDB database"))
-  .catch((err) => console.log(err));
-
-async function main() {
-  // function ki definition likhi hui hai (hoisting ke wajah se mil jaata hai).
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-}
 
 //our routess
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // this will mount the review router on the listings/:id/reviews route, so that we can access the reviews for a particular listing
 
 app.use("/", userRouter); // user routes for authentication and user management
-
-app.use("/", require("./routes/frontend.js")); // Serve React app for all other routes (SPA routing)
 
 
 

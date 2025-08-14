@@ -33,6 +33,9 @@ frontend/dist/
 *.swp
 *.swo
 
+# scripts
+scripts/
+
 # Test and temp files
 testsprite_tests/tmp/
 

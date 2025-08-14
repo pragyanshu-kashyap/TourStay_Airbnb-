@@ -15,7 +15,7 @@ module.exports.signup = (async (req, res) => {
       const registeredUser = await User.register(newUser, password); // registering the user with the password , here User.register is a method provided by passport-local-mongoose which hashes the password and saves the user to the database
 
       req.login(registeredUser, (err) => {
-        // req.login is a method provided by passport to log in the user after registration, it sets the user in the session , it takes the registered user and a callback function as arguments. If there is an error during login, it will call the callback function with the error as the first argument.
+        // req.login is a method provided by passport to log in the user after registration, without logging again after signUP, it sets the user in the session , it takes the registered user and a callback function as arguments. If there is an error during login, it will call the callback function with the error as the first argument.
         if (err) {
           console.error("Error during login after signup:", err); // logging the error to the console
           req.flash(
@@ -25,10 +25,10 @@ module.exports.signup = (async (req, res) => {
           return res.redirect("/login"); // redirecting back to the signup page
         }
         // If login is successful, proceed to the next step
-        console.log(
-          "User logged in successfully after signup:",
-          registeredUser
-        ); // logging the registered user to the console
+        // console.log(
+        //   "User logged in successfully after signup:",
+        //   registeredUser
+        // ); // logging the registered user to the console
         req.flash("success", "You have successfully signed up!"); // setting the success message
 
         res.redirect("/listings"); // redirecting to the listings page after successful sign up

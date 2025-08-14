@@ -57,6 +57,7 @@ listing.get(
 listing.post(
   "/:id",isLoggedIn,isOwner,
   //isOwner middleware will check if the current user is the owner of the listing, if not then it will throw an error and redirect to the show page of the listing with a flash message.
+  upload.single('listing[image]'),//  this middleware will handle the file upload when the user submits the edit listing form, and it will save the file in the cloudinary storage.
   validateListing,
   wrapAsync(listingController.updateListing) // this will update the listing in the database after editing it, and it will check if the data is valid before updating it.
 );

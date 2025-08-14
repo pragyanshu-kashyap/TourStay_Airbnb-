@@ -71,8 +71,18 @@ module.exports.renderEditForm = async (req, res, next) => {
 };
 
 module.exports.updateListing = async (req, res) => {
-  const { id } = req.params; // this will get the id from the url params and store it in the id variable.
-  await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // this will update the listing with the new data coming from the form.
+  const { id } = req.params; // this will get the id from the url params and store it in the id variable
+
+  let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // this will update the listing with the new data coming from the form.
+
+  if (typeof req.file !== "undefined") {
+    listing.image = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+  }
+
+  await listing.save();
 
   req.flash("success", "Listing updated successfully");
   // this will flash a success message to the user after updating the listing.

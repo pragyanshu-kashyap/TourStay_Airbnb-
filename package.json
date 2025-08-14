@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "20.17.0"
+  },
   "name": "airbnb-project",
   "version": "1.0.0",
   "main": "index.js",
@@ -13,8 +16,9 @@
   "description": "",
   "dependencies": {
     "aos": "^2.3.4",
-    "cloudinary": "^2.7.0",
+    "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
     "cookie": "^1.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

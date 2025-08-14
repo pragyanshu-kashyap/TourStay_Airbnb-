@@ -82,23 +82,12 @@ module.exports.validateListing = (req, res, next) => {
 
 //function for the server side validation of the review model , which is to be used as  middleware
 module.exports.validateReview = (req, res, next) => {
-  // Log the entire request body
-  console.log("req.body:", req.body);
-
-  // Log the review object specifically
-  console.log("req.body.review:", req.body.review);
-
   if (!req.body.review) {
     throw new ExpressError(400, "Review data is required.");
   }
-
-  // Log what is being sent to Joi
-  console.log("Validating with Joi:", req.body.review);
-
   const { error } = reviewSchema.validate(req.body.review);
-
   // Log the Joi error, if any
-  console.log("Joi validation error:", error);
+  // console.log("Joi validation error:", error);
 
   if (error) {
     let errorMsg = error.details.map((el) => el.message).join(",");

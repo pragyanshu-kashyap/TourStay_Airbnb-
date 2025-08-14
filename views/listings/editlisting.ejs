@@ -1,102 +1,72 @@
-<% layout("listings/layouts/boilerplate.ejs") -%> <%/* this line is to use the
-boilerplate.ejs file , which is in layouts folder, or ab iski wajah se
-boilerplate.ejs ka code run hoga. Aur hme baar baar footer and navbar ko use nhi
-krna hoga qki wo boilerplate.ejs mai hoga. or hme iss line k wajah se serve
-hoga. */%>
+<% layout("listings/layouts/boilerplate.ejs") -%>
+  <% /* this line is to use the boilerplate.ejs file , which is in layouts folder, or ab iski wajah se boilerplate.ejs
+    ka code run hoga. Aur hme baar baar footer and navbar ko use nhi krna hoga qki wo boilerplate.ejs mai hoga. or hme
+    iss line k wajah se serve hoga. */%>
 
-<div class="row mt-4">
-  <div class="col-8 offset-2">
-    <h2>Edit Listing</h2>
-    <form action="/listings/<%=listing._id %>" method="POST" class="needs-validation" novalidate>
-      <div>
-        <label for="title" class="form-label">Title</label>
-        <input
-          type="text"
-          name="listing[title]"
-          placeholder="Title"
-          value="<%=listing.title %>"
-          class="form-control"
-          required
-        />
-          <div class="valid-feedback">
-            Looks good!
+    <div class="row mt-4">
+      <div class="col-8 offset-2">
+        <h2>Edit Listing</h2>
+        <form action="/listings/<%=listing._id %>" method="POST" class="needs-validation" novalidate
+          enctype="multipart/form-data">
+          <div>
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="listing[title]" placeholder="Title" value="<%=listing.title %>"
+              class="form-control" required />
+            <div class="valid-feedback">
+              Looks good!
+            </div>
           </div>
-      </div>
 
-      <div>
-        <label for="description" class="form-label">Description</label>
-        <textarea type="text" name="listing[description]" class="form-control" required>
+          <div>
+            <label for="description" class="form-label">Description</label>
+            <textarea type="text" name="listing[description]" class="form-control" required>
         <%=listing.description %></textarea>
-        <div class="valid-feedback">
-            Looks good!
+            <div class="valid-feedback">
+              Looks good!
+            </div>
           </div>
+
+          <div>
+            <label for="image" class="form-label">Upload New Image</label>
+            <input type="file" name="listing[image]"
+              class="form-control" />
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="mb-3 col-md-4">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" name="listing[price]" placeholder="Price" value="<%=listing.price %>"
+                class="form-control" required />
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+
+            <div class="mb-3 col-md-8">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" name="listing[country]" placeholder="Country" value="<%=listing.country %>"
+                class="form-control" required />
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listing[location]" placeholder="Location" value="<%=listing.location %>"
+              class="form-control" required />
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+
+          <br />
+
+          <button class="btn btn-danger mb-2" type="submit">Save</button>
+        </form>
       </div>
-
-      <div>
-        <label for="image" class="form-label">Image URL</label>
-        <input
-          type="text"
-          name="listing[image]"
-          placeholder="Image URL"
-          value="<%=listing.image %>"
-          class="form-control"
-          required
-        />
-        <div class="valid-feedback">
-            Looks good!
-          </div>
-      </div>
-
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label for="price" class="form-label">Price</label>
-          <input
-            type="number"
-            name="listing[price]"
-            placeholder="Price"
-            value="<%=listing.price %>"
-            class="form-control"
-            required
-          />
-          <div class="valid-feedback">
-            Looks good!
-          </div>
-        </div>
-
-        <div class="mb-3 col-md-8">
-          <label for="country" class="form-label">Country</label>
-          <input
-            type="text"
-            name="listing[country]"
-            placeholder="Country"
-            value="<%=listing.country %>"
-            class="form-control"
-            required
-          />
-          <div class="valid-feedback">
-            Looks good!
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label for="location" class="form-label">Location</label>
-        <input
-          type="text"
-          name="listing[location]"
-          placeholder="Location"
-          value="<%=listing.location %>"
-          class="form-control"
-          required
-        />
-        <div class="valid-feedback">
-            Looks good!
-          </div>
-      </div>
-
-      <br />
-
-      <button class="btn btn-danger mb-2" type="submit">Save</button>
-    </form>
-  </div>
-</div>
+    </div>
