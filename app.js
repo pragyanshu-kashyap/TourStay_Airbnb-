@@ -1,7 +1,8 @@
-if(process.env.NODE_ENV !== "production") {// this will check if the environment is not production, then it will load the environment variables from the .env file , only in development mode.
-  
+if (process.env.NODE_ENV !== "production") {
+  // this will check if the environment is not production, then it will load the environment variables from the .env file , only in development mode.
+
   require("dotenv").config(); // this will load the environment variables from the .env file
-};
+}
 
 const express = require("express");
 const app = express();
@@ -13,7 +14,7 @@ const ejsMate = require("ejs-mate");
 
 const session = require("express-session"); // this is used to create a session for the user, so that we can store user data in the session
 
-const MongoStore = require('connect-mongo');  
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash"); // this is used to flash messages to the user, so that we can show success or error messages to the user
 
 const passport = require("passport"); // this is used to authenticate the user, so that we can log in and log out the user
@@ -27,8 +28,12 @@ const User = require("./models/user.js"); // this is used to import the User mod
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js"); // user routes for authentication and user management
+const wrapAsync = require("./utils/wrapAsync.js");
+const contactRouter = require("./routes/contact.js");
 
-const dbUrl = process.env.ATLASDB_URL; //this is string got from atlas ,stored on.env file . with the help of this url we are connecting to the Atlas DB
+const dbUrl = process.env.ATLASDB_URL; //this is string got from atlas ,stored on.env file . with the help of this url we are connecting to the Atlas DB on cloud
+
+//const localDB = "mongodb://127.0.0.1:27017/wanderlust";
 
 main() //Async function call, returns a Promise
   .then(() => console.log("Connected to MongoDB database"))
@@ -52,7 +57,6 @@ app.use(methodoverride("_method")); //
 app.engine("ejs", ejsMate); // this line is used to use ejsMate as the template engine for ejs, which allows us to use layout files and partials in our ejs templates.
 app.use(express.static(path.join(__dirname, "/public"))); // to use the static files from the public folder
 
-
 const store = MongoStore.create({ // this creates a new MongoDB store for session data
   mongoUrl: dbUrl, // MongoDB connection string jo ki hme Atlas DB me connect karne me madad karega
   crypto: {
@@ -65,8 +69,9 @@ store.on("error", function (e) { // this line is used to handle errors in the Mo
   console.log("Mongo Session Store Error", e);
 });
 
-const sessionConfig = { // session configuration object
-  store, //iss line k help se ab hmare session ki information Atlas DB me store hogi , jo pehle locally store ho rhi thi
+const sessionConfig = {
+  // session configuration object
+  store: store, //iss line k help se ab hmare session ki information Atlas DB me store hogi , jo pehle locally store ho rhi thi
   secret: process.env.SECRET, // secret key to sign the session ID cookie
   resave: false,
   saveUninitialized: true,
@@ -77,13 +82,11 @@ const sessionConfig = { // session configuration object
   },
 };
 
-
-
-app.use(session(sessionConfig)); // this line is used to use express-session middleware, which allows us to create a session for the user and gets all its information from the session store by "req.user". 
+app.use(session(sessionConfig)); // this line is used to use express-session middleware, which allows us to create a session for the user and gets all its information from the session store by "req.user".
 
 app.use(flash()); // this line is used to use connect-flash middleware, which allows us to flash messages to the user
 app.use(passport.initialize()); // this line is used to initialize passport middleware, which allows us to use passport for authentication
-app.use(passport.session()); // this line is used to use passport session middleware, which allows us to store user data in the session 
+app.use(passport.session()); // this line is used to use passport session middleware, which allows us to store user data in the session
 
 passport.use(new LocalStrategy(User.authenticate())); // this line is used to use the local strategy for authentication, which allows us to authenticate the user using username and password
 
@@ -91,13 +94,12 @@ passport.serializeUser(User.serializeUser()); // this line is used to serialize 
 
 passport.deserializeUser(User.deserializeUser()); // this line is used to deserialize the user, which allows us to retrieve the user data from the session using the user ID stored in the session
 
-
-
-//koi bhi variable jisko hum direct ejs mai nhi use kr sakte hain, usko hum res.locals me store krte hain, taaki wo variable ejs templates me accessible ho sake. 
+//koi bhi variable jisko hum direct ejs mai nhi use kr sakte hain, usko hum res.locals me store krte hain, taaki wo variable ejs templates me accessible ho sake.
 // As for example, we can use res.locals.currentUser to access the current user in ejs templates.
 // This is useful for rendering user-specific data in the templates, such as showing the user's name in the navigation bar.
 
-app.use((req, res, next) => { // this middleware is used to set the flash messages in res.locals, so that we can access them in our ejs templates
+app.use((req, res, next) => {
+  // this middleware is used to set the flash messages in res.locals, so that we can access them in our ejs templates
 
   res.locals.success = req.flash("success"); // this line is used to set the success message in res.locals, so that we can access it in our ejs templates
   res.locals.deletesuccess = req.flash("deletesuccess"); // this line is used to set the error message in res.locals, so that we can access it in our ejs templates
@@ -107,19 +109,32 @@ app.use((req, res, next) => { // this middleware is used to set the flash messag
   res.locals.currentUser = req.user; // this line is used to set the current user in res.locals, so that we can access it in our ejs templates or anywhere else in our app
 
   res.locals.redAlert = req.flash("redAlert"); // this line is used to set the red alert message in res.locals, so that we can access it in our ejs templates
-  
+
   next(); // this line is used to call the next middleware in the stack, so that the request can continue to the next middleware or route handler
 });
 
+//our routes
+// app.use("/", wrapAsync(async (req, res, next) => {
+//   res.render("listings/landing");
+// }));
+// app.use("/", ...) with a handler that sends a response (like res.render(...)) will match every route and immediately send a response, so no other route handlers get a chance to run. This is why your landing page appears everywhere.
 
+//to fix above problem we used  below get method
+app.get(
+  "/",
+  wrapAsync(async (req, res, next) => {
+    res.render("listings/landing");
+  })
+);
 
-//our routess
+// The next three lines:
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // this will mount the review router on the listings/:id/reviews route, so that we can access the reviews for a particular listing
-
 app.use("/", userRouter); // user routes for authentication and user management
+app.use("/", contactRouter); // contact form route
 
-
+//The above three lines:
+//attach routers (not direct response handlers ,like first commented line). Routers can define their own sub-routes and only send a response if a matching route is found inside them. If not, they call next(), allowing other middleware or error handlers to run.
 
 app.all("*", (req, res) => {
   // Catch-all route to handle 404 errors for unmatched routes

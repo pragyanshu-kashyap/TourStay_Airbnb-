@@ -1,0 +1,71 @@
+<% layout("listings/layouts/boilerplate.ejs") -%>
+  <% /* this line is to use the boilerplate.ejs file , which is in layouts folder, or ab iski wajah se boilerplate.ejs
+    ka code run hoga. Aur hme baar baar footer and navbar ko use nhi krna hoga qki wo boilerplate.ejs mai hoga. or hme
+    iss line k wajah se dono file(footer and navbar) serve hoga. */%>
+
+<body>
+
+    <div class="landing-container">
+        <div class="logo">
+            <i class="fa-solid fa-house-chimney"></i>
+        </div>
+        <h1>Welcome to <span style="color:#fbbf24;">TourStay</span></h1>
+        <div class="subtitle">Your gateway to unique stays and unforgettable experiences.<br>
+            <span style="color:#f472b6;font-size:1.1rem;">Discover, book, and review amazing places around the
+                world.</span>
+        </div>
+        <a href="/listings" class="cta-btn">Explore Listings</a>
+        <div class="features">
+            <div class="feature">
+                <i class="fa-solid fa-bed"></i>
+                <h3>Find Unique Stays</h3>
+                <p>Browse a wide range of beautiful homes, apartments, and unique places to stay. <br><span
+                        style="color:#fbbf24;font-weight:600;">Adventure awaits!</span></p>
+            </div>
+            <div class="feature">
+                <i class="fa-solid fa-star"></i>
+                <h3>Read & Leave Reviews</h3>
+                <p>See what others think and share your own experiences to help the community. <br><span
+                        style="color:#38bdf8;font-weight:600;">Your voice matters.</span></p>
+            </div>
+            <div class="feature">
+                <i class="fa-solid fa-user-plus"></i>
+                <h3>Join Our Community</h3>
+                <p>Sign up to save favorites, book stays, and connect with hosts and travelers. <br><span
+                        style="color:#f472b6;font-weight:600;">Be part of something special.</span></p>
+            </div>
+        </div>
+        <svg class="wave" height="60" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#e0e7ff" fill-opacity="1"
+                d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,37.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
+            </path>
+        </svg>
+    </div>
+
+    <div class="help-support-section">
+        <h2><i class="fa-solid fa-circle-info"></i> Help & Support</h2>
+        <p>Need assistance or have questions? Our support team is here to help you 24/7.<br>
+            Explore our resources or reach out directly for personalized support.</p>
+        <div class="help-support-links">
+            <a href="mailto:support@tourstay.com" class="help-link"><i class="fa-solid fa-envelope"></i> Email
+                Support</a>
+            <a href="#" class="help-link"><i class="fa-solid fa-book"></i> FAQ & Guides</a>
+            <a href="#" class="help-link"><i class="fa-solid fa-comments"></i> Live Chat</a>
+        </div>
+    </div>
+
+    <div class="contact-section">
+        <h2><i class="fa-solid fa-envelope-open-text"></i> Contact Us</h2>
+        <p>Have a question, suggestion, or just want to say hello? Fill out the form below and our team will get back to
+            you soon!</p>
+        <form class="contact-form" action="/contact" method="post" autocomplete="off">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>
