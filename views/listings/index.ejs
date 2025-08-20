@@ -4,42 +4,6 @@
     iss line k wajah se dono file(footer and navbar) serve hoga. */%>
 
     <body>
-      <style>
-        #filters {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-        }
-
-        .filter {
-          text-align: center;
-          margin-right: 2rem;
-          margin-top: 1rem;
-          opacity: 0.7;
-        }
-        .filter p {
-          font-size: 0.8rem;
-        }
-
-        .filter:hover {
-          opacity: 1;
-          cursor: pointer;
-        }
-
-        #tax-info {
-          display: none;
-        }
-
-        .tax-toggle {
-          border: 1px solid #000000;
-          border-radius: 1rem;
-          height: 3rem;
-          padding: 1rem;
-          margin-left: auto;
-          display: flex;
-          align-items: center;
-        }
-      </style>
 
       <div id="filters">
         <div class="filter">
@@ -122,28 +86,28 @@
 
       </div>
 
-      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1  mt-3">
-        <%for(let listing of allListings){%>
-          <a href="/listings/<%=listing._id %>"
-            class="listing-link"><!-- // is tareeke se hm pure card ko anchor tag bna sakte hai, jisse ki jab bhi user card pe click karega toh wo particular listing page pe chale jaayega -->
-            <div class="card col listing-card">
-              <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image">
-              <div class="card-img-overlay"> pk</div>
-              <div class="card-body" style="background-color: #d8bee7;">
-                <p class="card-text">
-                  <b>
-                    <%= listing.title %><br>
-                  </b>
-                  &#8377 <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>/night &nbsp;
-                    <i class="tax-info"> &nbsp;+18% GST</i>
-                    <br>
-                    <%= listing.description %><br>
-
-                </p>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-3">
+        <% for (let listing of allListings) { %>
+          <div class="col">
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+              <div class="card listing-card">
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image">
+                <div class="card-img-overlay"> pk</div>
+                <div class="card-body" style="background-color: #d8bee7;">
+                  <p class="card-text">
+                    <b>
+                      <%= listing.title %><br>
+                    </b>
+                    &#8377 <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>/night &nbsp;
+                      <i class="tax-info"> &nbsp;+18% GST</i>
+                      <br>
+                      <%= listing.description %><br>
+                  </p>
+                </div>
               </div>
-            </div>
-            <% } %>
-          </a>
+            </a>
+          </div>
+          <% } %>
       </div>
     </body>
 

@@ -1,11 +1,11 @@
 <% layout("listings/layouts/boilerplate.ejs") -%>
 
     <div class="row">
-        <div class="col-8 offset-2 mt-2 mb-2">
+        <div class="col-12 col-md-8 offset-md-2 mt-2 mb-2">
             <h2>
                 <%= listing.title %> Details
             </h2>
-            <div class="card listing-card" style="width: 60vw;">
+            <div class="card listing-card w-100">
                 <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing_image">
                 <div class="card-body">
                     <i> owned by : <%= listing.owner.username %></i>
@@ -32,7 +32,8 @@
             </ul>
         </div>
 
-        <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
+        <% if (typeof currentUser !=='undefined' && currentUser && currentUser._id &&
+            currentUser._id.equals(listing.owner._id)) { %>
             <%# this above line is used to check if the user is the owner of the particular listing then it will display
                 the edit and delete buttons, by this way we can implement the functionality that only the owner can edit
                 or delete the listing %>
@@ -52,10 +53,10 @@
                 </div>
                 <% } %>
 
-                    <div class="col-8 offset-2 mb-4 mt-2">
+                    <div class="col-12 col-md-8 offset-md-2 mb-4 mt-2">
                         <hr>
                         <h4>Make a review</h4>
-                        <% if(currentUser) { %>
+                        <% if (typeof currentUser !=='undefined' && currentUser) { %>
                             <form action="/listings/<%= listing._id %>/reviews" method="post" class="needs-validation"
                                 novalidate>
                                 <!-- <div class="mb-4 mt-2">
@@ -93,24 +94,26 @@
                                 <% } %>
                                     <hr />
                                     <h4><b>All reviews</b></h4>
-                                    <div class="row">
+                                    <div class="row row-cols-1 row-cols-md-2 g-3">
                                         <% for (let review of listing.reviews) { %>
-                                            <div class="card col-5 ms-4 mb-2 mt-auto ">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">
-                                                        @<%= review.author.username %>
-                                                    </h5>
-                                                    <p class="starability-result card-text ms-4"
-                                                        data-rating="<%= review.rating %>"></p>
-                                                    <p class="card-text">
-                                                        <%= review.comment %>
-                                                    </p>
+                                            <div class="col">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            @<%= review.author.username %>
+                                                        </h5>
+                                                        <p class="starability-result card-text"
+                                                            data-rating="<%= review.rating %>"></p>
+                                                        <p class="card-text">
+                                                            <%= review.comment %>
+                                                        </p>
+                                                    </div>
+                                                    <form
+                                                        action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                                        class="mb-2 ms-2" method="post">
+                                                        <button class="btn btn-sm btn-dark">Delete</button>
+                                                    </form>
                                                 </div>
-                                                <form
-                                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                                                    class="mb-2 ms-2" method="post">
-                                                    <button class="btn btn-sm btn-dark">Delete</button>
-                                                </form>
                                             </div>
                                             <% } %>
                                     </div>

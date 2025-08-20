@@ -1,13 +1,14 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/"><i class="fa-solid fa-route"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="/listings">Explore</a>
-        
+
       </div>
       <!-- end{itemize} -->
       <div class="navbar-nav ms-auto">
@@ -17,7 +18,7 @@
         <%#Check if the user is authenticated; if so, render the logout button. here currentUser is set in app.js using
           res.locals.currentUser , since we can't access req.user in ejs %>
 
-          <% if (currentUser) { %>
+          <% if (typeof currentUser !=='undefined' && currentUser) { %>
 
             <a class="nav-link" href="/logout"><b>Log out</b></a>
             <% } else { %>
@@ -25,7 +26,7 @@
                 login buttons%>
                 <a class="nav-link" href="/signup"><b>Sign up</b></a>
                 <a class="nav-link" href="/login"><b>Log in</b></a>
-              <% } %>
+                <% } %>
       </div>
     </div>
   </div>

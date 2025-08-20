@@ -33,7 +33,7 @@ const contactRouter = require("./routes/contact.js");
 
 const dbUrl = process.env.ATLASDB_URL; //this is string got from atlas ,stored on.env file . with the help of this url we are connecting to the Atlas DB on cloud
 
-//const localDB = "mongodb://127.0.0.1:27017/wanderlust";
+// const localDB = "mongodb://127.0.0.1:27017/wanderlust";
 
 main() //Async function call, returns a Promise
   .then(() => console.log("Connected to MongoDB database"))

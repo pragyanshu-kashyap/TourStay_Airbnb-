@@ -27,6 +27,44 @@ body {
   color: #ffbe76 !important;
 }
 
+/* responsive: navbar + footer */
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .fa-route {
+    font-size: 1.6rem;
+  }
+
+  .nav-link {
+    font-size: 1rem !important;
+  }
+
+  .f-info {
+    height: auto;
+    padding: 0.75rem 0;
+  }
+
+  .f-info-links,
+  .f-info-socials,
+  .f-info-brand {
+    flex-basis: 100%;
+    margin: 0.25rem 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .logo {
+    font-size: 2.6rem;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
 /* footer */
 .f-info-links a {
   text-decoration: none;
@@ -394,5 +432,71 @@ h1 {
 
   h1 {
     font-size: 2.1rem;
+  }
+}
+
+/* =============================
+   Listings: responsive styles
+   ============================= */
+/* filters bar */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter {
+  text-align: center;
+  margin-right: 2rem;
+  margin-top: 1rem;
+  opacity: 0.7;
+}
+
+.filter p {
+  font-size: 0.8rem;
+}
+
+.filter:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.tax-toggle {
+  border: 1px solid #000000;
+  border-radius: 1rem;
+  height: 3rem;
+  padding: 1rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* phones and small tablets */
+@media (max-width: 768px) {
+  /* smaller card image */
+  .card-img-top {
+    height: 14rem !important;
+  }
+
+  /* filters layout */
+  #filters {
+    gap: 0.25rem 0.75rem;
+  }
+  .filter {
+    margin-right: 1rem;
+  }
+  .tax-toggle {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    height: auto;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* very small phones */
+@media (max-width: 400px) {
+  .card-img-top {
+    height: 10rem !important;
   }
 }
